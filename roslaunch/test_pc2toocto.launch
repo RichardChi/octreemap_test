@@ -1,0 +1,6 @@
+<launch>
+	<node pkg="octreemap" type="test_pc2tooctomap" name="test_pc2tooctomap" output="screen">
+		<remap from="/points_raw" to="/cloud_pcd" />
+	</node>
+
+</launch>
