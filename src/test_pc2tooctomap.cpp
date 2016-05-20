@@ -63,6 +63,7 @@ int main(int argc, char  **argv)
 
 	ros::Subscriber points_sub = nh.subscribe("points_raw", 100000, points_callback);
 	ros::Timer timer = nh.createTimer(ros::Duration(0.1), timerCallback);
+	octomap_pub = nh.advertise<octomap_msgs::Octomap>("octomap", 1000);
 
 	ros::spin();
 

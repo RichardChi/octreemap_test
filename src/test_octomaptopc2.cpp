@@ -22,8 +22,8 @@ static void map_callback(const octomap_msgs::Octomap& input)
 {	
 	octomap::OcTree* octo_map =  binaryMsgToMap(input);
 	octomap::point3d_list points ;
-	pcl::PointXYZ point_p;
-	pcl::PointCloud<pcl::PointXYZ> cloud;
+	pcl::PointXYZI point_p;
+	pcl::PointCloud<pcl::PointXYZI> cloud;
 	for (octomap::OcTree::leaf_iterator it = octo_map->begin(); it!=octo_map->end(); ++it)
 	{
 		if (octo_map->isNodeOccupied(*it))
@@ -32,6 +32,7 @@ static void map_callback(const octomap_msgs::Octomap& input)
 			point_p.x = (double)it.getX();
 			point_p.y = (double)it.getY();
 			point_p.z = (double)it.getZ();
+			point.intensity = 0.5;
 			cloud.points.push_back(point_p);
 		}
 	}
@@ -57,6 +58,7 @@ int main(int argc, char  **argv)
 	ros::NodeHandle nh;
 
 	ros::Subscriber octomap_sub = nh.subscribe("octomap", 100000, map_callback);
+	octo_cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("octomap", 5);
 
 	ros::spin();
 
