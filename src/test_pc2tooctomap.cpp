@@ -5,25 +5,45 @@
 */
 #include <ros/ros.h>
 #include <stdio.h>
+#include <sensor_msgs/PointCloud2.h>
 #include <octomap/octomap.h>
 #include <octomap_ros/conversions.h>
-//#include <sensor_msgs/PointCloud2.h>
+#include <octomap_msgs/conversions.h>
+#include <octomap_msgs/Octomap.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
+#include <pcl/point_types.h>
+#include <pcl_conversions/pcl_conversions.h>
 
 octomap::OcTree tree( 0.05 );
+ros::Publisher octomap_pub ;//= n.advertise<octomap_msgs::Octomap>("octomap", 1000);
 
 static void points_callback(const sensor_msgs::PointCloud2& input)
 {
+	pcl::PointCloud<pcl::PointXYZI> tmp;
+	pcl::fromROSMsg(input, tmp);
+	ROS_INFO("size = %d", tmp.points.size());
+
 	octomap::Pointcloud octo_cloud;
 	octomap::pointCloud2ToOctomap(input, octo_cloud);
-	octomap::point3d origin (0.01f, 0.01f, 0.02f);
 
+	octomap::point3d pose (0.01f, 0.01f, 0.02f);
+
+	
+	tree.insertPointCloud(octo_cloud, pose);
 	tree.updateInnerOccupancy();
-	tree.insertPointCloud(octo_cloud, origin);
+
+
+	octomap_msgs::Octomap octo_msg;
+	octomap_msgs::binaryMapToMsg(tree, octo_msg);
+	octo_msg.header.frame_id = 'octmap';
+	octo_msg.header.stamp = ros::Time::now();	
+	octomap_pub.publish(octo_msg);
     	// 存储octomap
+    	/*
     	std::cout << "writing to spherical_scan.bt..." << std::endl;
     	tree.writeBinary( "/home/gallop/data/spherical_scan.bt" );
+	*/
 
 
 }
