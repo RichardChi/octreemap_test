@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(octreemap)
 
+project(octreemap)
+SET(CMAKE_CXX_FLAGS -std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   roscpp
@@ -30,14 +31,17 @@ include_directories(${OCTOMAP_INCLUDE_DIRS})
 
 
  add_executable(test_pc2tooctomap src/test_pc2tooctomap.cpp)
+ add_executable(test_octomaptopc2 src/test_octomaptopc2.cpp)
 
 
 add_dependencies(test_pc2tooctomap ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(test_octomaptopc2 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
  target_link_libraries(test_pc2tooctomap
    ${catkin_LIBRARIES}
  )
+ target_link_libraries(test_octomaptopc2   ${catkin_LIBRARIES} )
 link_libraries(${OCTOMAP_LIBRARIES})
 
 
