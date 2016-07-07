@@ -32,7 +32,7 @@ static void map_callback(const octomap_msgs::Octomap& input)
 			point_p.x = (double)it.getX();
 			point_p.y = (double)it.getY();
 			point_p.z = (double)it.getZ();
-			point.intensity = 0.5;
+			//point.intensity = 0.5;
 			cloud.points.push_back(point_p);
 		}
 	}
