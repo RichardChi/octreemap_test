@@ -16,11 +16,15 @@
 #include <pcl/point_types.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
+#include <nav_msgs/Path.h>
+#include <geometry_msgs/PoseStamped.h>
+
 
 static ros::Publisher octo_cloud_pub;
 static void map_callback(const octomap_msgs::Octomap& input)
 {	
-	octomap::OcTree* octo_map =  binaryMsgToMap(input);
+	octomap::OcTree* octo_map ;//=  binaryMsgToMap(input);
+	readTree(octo_map, input);
 	octomap::point3d_list points ;
 	pcl::PointXYZI point_p;
 	pcl::PointCloud<pcl::PointXYZI> cloud;

@@ -11,6 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   octomap_ros
   octomap_msgs
+  nav_msgs
+  geometry_msgs
+  tf
 )
 
 
